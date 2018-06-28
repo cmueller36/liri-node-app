@@ -6,12 +6,14 @@ var parameter = process.argv[3];
 
 require("dotenv").config();
 var Twitter = require('twitter');
+var Spotify = require("node-spotify-api");
 var keys = require('./keys.js');
 var tweetCount = {
     count:parameter
 }
 
-//var spotify = new Spotify(keys.spotify);
+
+var spotify = new Spotify(keys.spotify);
 var client = new Twitter(keys.twitter);
 
 
@@ -30,7 +32,25 @@ var myTweets = function(){
     })
 }
 
+//function for searching spotify data
+var mySpotify = function(song){
+    spotify.search({ type: 'track', query: 'dancing in the moonlight' }, function(err, data) {
+        if ( err ) {
+            console.log('Error occurred: ' + err);
+            return;
+        }
+        
+        console.log(data)
+    });
+}
+
+
+
 //call for tweets and how many to return
 if (method === "my-tweets"){
     myTweets();
 };
+
+if (method === "spotify-this-song"){
+    mySpotify();
+}
