@@ -49,7 +49,7 @@ var mySpotify = function(){
     });
 }
 
-//function for searching movie
+//function for searching movie title
 var myMovie = function(){
     request("http://www.omdbapi.com/?apikey=de7e3bd&t="+parameter,function(err,response,body){
         if(!err && response.statusCode == 200){
