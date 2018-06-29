@@ -2,16 +2,18 @@
 var method = process.argv[2];
 
 //parameter to pass for the method
-var parameter = process.argv[3];
+var parameter = process.argv.slice(3).join(" ");
 
 require("dotenv").config();
 var Twitter = require('twitter');
+var Spotify = require("node-spotify-api");
 var keys = require('./keys.js');
 var tweetCount = {
     count:parameter
 }
 
-//var spotify = new Spotify(keys.spotify);
+
+var spotify = new Spotify(keys.spotify);
 var client = new Twitter(keys.twitter);
 
 
@@ -30,7 +32,29 @@ var myTweets = function(){
     })
 }
 
+//function for searching spotify data
+var mySpotify = function(){
+    spotify.search({ type: 'track', query: parameter }, function(err, data) {
+        if ( err ) {
+            console.log('Error occurred: ' + err);
+            return;
+        }
+        console.log("=== Here is your Spotify result ===");
+        console.log("Artist :  "+data.tracks.items[0].album.artists[0].name);
+        console.log("Song :  "+data.tracks.items[0].name);
+        console.log("Preview Link :  "+data.tracks.items[0].preview_url);
+        console.log("Album :  "+data.tracks.items[0].album.name);
+    
+    });
+}
+
+
+
 //call for tweets and how many to return
 if (method === "my-tweets"){
     myTweets();
 };
+
+if (method === "spotify-this-song"){
+    mySpotify();
+}
