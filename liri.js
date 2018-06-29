@@ -11,6 +11,7 @@ var keys = require('./keys.js');
 var tweetCount = {
     count:parameter
 }
+var request = require("request");
 
 
 var spotify = new Spotify(keys.spotify);
@@ -48,6 +49,29 @@ var mySpotify = function(){
     });
 }
 
+//function for searching movie
+var myMovie = function(){
+    request("http://www.omdbapi.com/?apikey=de7e3bd&t="+parameter,function(err,response,body){
+        if(!err && response.statusCode == 200){
+            var movie = JSON.parse(body);
+            console.log("=== Here is your Movie ===");
+            console.log("Title: "+movie.Title);
+            console.log("Release Year: "+movie.Year);
+            console.log("IMDB Rating: "+movie.Ratings[0].Value);
+            if(!movie.Ratings[1]){
+                console.log("No Rotten Tomatoes");
+            }
+            else{
+                console.log("Rotten Tomatoes: "+movie.Ratings[1].Value);
+            }
+            console.log("Country: "+movie.Country);
+            console.log("Language: "+movie.Language);
+            console.log("Plot: "+movie.Plot);
+            console.log("Actors: "+movie.Actors);
+        }
+    })
+}
+
 
 
 //call for tweets and how many to return
@@ -57,4 +81,8 @@ if (method === "my-tweets"){
 
 if (method === "spotify-this-song"){
     mySpotify();
+}
+
+if (method === "movie-this"){
+    myMovie();
 }
