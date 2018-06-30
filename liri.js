@@ -12,6 +12,7 @@ var tweetCount = {
     count:parameter
 }
 var request = require("request");
+var fs = require("fs");
 
 
 var spotify = new Spotify(keys.spotify);
@@ -34,19 +35,26 @@ var myTweets = function(){
 }
 
 //function for searching spotify data
-var mySpotify = function(){
-    spotify.search({ type: 'track', query: parameter }, function(err, data) {
-        if ( err ) {
-            console.log('Error occurred: ' + err);
-            return;
-        }
-        console.log("=== Here is your Spotify result ===");
-        console.log("Artist :  "+data.tracks.items[0].album.artists[0].name);
-        console.log("Song :  "+data.tracks.items[0].name);
-        console.log("Preview Link :  "+data.tracks.items[0].preview_url);
-        console.log("Album :  "+data.tracks.items[0].album.name);
-    
-    });
+var mySpotify = function(mysong){
+    var mysong = process.argv.slice(3).join(" ");
+    if(!mysong){
+        mysong = "The Sign"
+    }
+    else{
+        parameter = mysong
+        spotify.search({ type: 'track', query: parameter }, function(err, data) {
+            if ( err ) {
+                console.log('Error occurred: ' + err);
+                return;
+            }
+            console.log("=== Here is your Spotify result ===");
+            console.log("Artist :  "+data.tracks.items[0].album.artists[0].name);
+            console.log("Song :  "+data.tracks.items[0].name);
+            console.log("Preview Link :  "+data.tracks.items[0].preview_url);
+            console.log("Album :  "+data.tracks.items[0].album.name);
+        
+        });
+    }
 }
 
 //function for searching movie title
@@ -72,6 +80,33 @@ var myMovie = function(){
     })
 }
 
+//function for random for Liri
+var myLiri = function(){
+    fs.readFile("random.txt", "utf8", function(err, data){
+        myLiriResults = data.split(",");
+        mysong = myLiriResults[1];
+    if(!mysong){
+        mysong = "The Sign"
+    }
+    else{
+        parameter = mysong
+        spotify.search({ type: 'track', query: parameter }, function(err, data) {
+            if ( err ) {
+                console.log('Error occurred: ' + err);
+                return;
+            }
+            console.log("=== Here is your Spotify result ===");
+            console.log("Artist :  "+data.tracks.items[0].album.artists[0].name);
+            console.log("Song :  "+data.tracks.items[0].name);
+            console.log("Preview Link :  "+data.tracks.items[0].preview_url);
+            console.log("Album :  "+data.tracks.items[0].album.name);
+        
+        });
+    }
+    })
+}
+
+
 
 
 //call for tweets and how many to return
@@ -85,4 +120,8 @@ if (method === "spotify-this-song"){
 
 if (method === "movie-this"){
     myMovie();
+}
+
+if (method === "do-what-it-says"){
+    myLiri();
 }
