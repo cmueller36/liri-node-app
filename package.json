@@ -4,7 +4,7 @@
   "description": "Liri BOT",
   "main": "index.js",
   "scripts": {
-    "test": "node liri-node-app my-tweets"
+    "test": "myTweets()"
   },
   "repository": {
     "type": "git",
