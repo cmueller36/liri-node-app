@@ -35,5 +35,9 @@ jobs:
         
       # run tests!
       - run: yarn test
+          command: |
+      echo Running test
+      myTweets
+      make test
 
 
